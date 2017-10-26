@@ -20,3 +20,74 @@ We will talk about each of them with exmaple.
 
 ### 1. Single Responsibility Principle
 
+*A Class should have only one reason to change*
+
+Like we have a class for `Report` Management like following:
+
+```java
+class Report {
+  public void setTitle(String title) {
+    // Set the title
+  }
+  
+  public void setContent(String content) {
+    // Set content
+  }
+  
+  public String getTitle() {
+    // return the title
+  }
+  
+  public String getContent() {
+    // return content
+  }
+  
+  public void printReport() {
+    // Print report
+  }
+}
+```
+
+At first it looks good, but this class can be change for two reason. First, the contents of report can change and second the printing login can change. So these are two different responsibilities one is business login and second one is representation login and they must be seperated according to SRP.
+
+There are chances that if we change the business logic the representational login will also change.
+
+```java
+class Report {
+  public void setTitle(String title) {
+    // Set the title
+  }
+  
+  public void setContent(String content) {
+    // Set content
+  }
+  
+  public String getTitle() {
+    // return the title
+  }
+  
+  public String getContent() {
+    // return content
+  }
+}
+
+interface PrintableReport {
+  public void printReport(Report report);
+}
+
+// Different representation logics
+
+class TextPrint implements PrintableReport {
+  public void printReport(Report report) {
+    System.out.print(report.getTitle() + report.getContent());
+  }
+}
+
+class HTMLPrint implements PrintableReport {
+  public void printReport(Report report) {
+    System.out.print("<html><head><title>" + report.getTitle() + "</title></head><body>" + report.getContent() + "</body></html>");
+  }
+}
+```
+
+Now the Business login and Representational logic are in different class. It will minimize the coupling and it is bad design to couple two different logics.
