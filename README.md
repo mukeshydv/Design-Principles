@@ -22,7 +22,7 @@ We will talk about each of them with exmaple.
 
 ### 1. Single Responsibility Principle
 
-*A Class should have only one reason to change*
+*`A Class should have only one reason to change`*
 
 Like we have a class for `Report` Management like following:
 
@@ -96,7 +96,7 @@ Now the Business login and Representational logic are in different class. It wil
 
 ### 2. Open Close Principle
 
-*Classes should be open for extension, but closed for modification*
+*`Classes should be open for extension, but closed for modification`*
 
 This principle states that any new functionality can be added in a system with minimum modification in the current code. Means the system should be open to additions but it should also closed for modification (less modification).
 
