@@ -1,6 +1,6 @@
 # Object Oriented Design Principles
 
-A good design is and most important step of Software Development life cycle, and to have a good design we must follow some set of guidelines. According to Robert Martin in "Agile Software Development: Principles, Patterns, and Practices" there are 3 main reasons of bad design that should be avoided:
+A good design is most important step of Software Development life cycle, and to have a good design we must follow some set of guidelines. According to Robert Martin in "Agile Software Development: Principles, Patterns, and Practices" there are 3 main reasons of bad design that should be avoided:
 
 1. **Rigidity** - System is hard to change, beacause it affects many part of the system.
 2. **Fragility** - Change to a part affects an unexpected part of the system.
