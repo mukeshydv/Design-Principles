@@ -91,3 +91,103 @@ class HTMLPrint implements PrintableReport {
 ```
 
 Now the Business login and Representational logic are in different class. It will minimize the coupling and it is bad design to couple two different logics.
+
+### 2. Open Close Principle
+
+*Classes should be open for extension, but closed for modification*
+
+This principle states that any new functionality can be added in a system with minimum modification in the current code. Means the system should be open to additions but it should also closed for modification (less modification).
+
+A class is closed when it is compiled or shared as library but it is also open since any new class can use it as parent and add new functionality.
+
+Let's assume we have an `AreaCalculator` class which calculates the sum of areas of different shape like this:
+
+```java
+class AreaCalculator { 
+ public double area(Object[] shapes) {
+  double area = 0;
+  for (Object shape in shapes) {
+    if (shape instanceof Square) {
+      Square square = (Square)shape;
+      area += Math.sqrt(square.height);
+    }
+
+    if (shape instanceof Triangle) {
+      Triangle triangle = (Triangle)shape;
+      double totalHalf = (triangle.firstSide + triangle.secondSide + triangle.thirdSide) / 2;
+      area += Math.sqrt(totalHalf * (totalHalf - triangle.firstSide) * 
+       (totalHalf - triangle.secondSide) * (totalHalf - triangle.thirdSide));
+    }
+
+    if (shape instanceof Circle) {
+      Circle circle = (Circle)shape;
+      area += circle.radius * circle.radius * Math.PI;
+    }
+  }
+  return area;
+ }
+}
+
+public class Square {
+  public double height;
+}
+
+public class Circle {
+  public double radius;
+}
+
+public class Triangle {
+  public double firstSide;
+  public double secondSide;
+  public double thirdSide;
+}
+```
+
+So in above example what if we have to add one more Shape? we have to change the `AreaCalculator` class. So this class doesn't follow OCP.
+
+Let's see the following code:
+
+```java
+class AreaCalculator {
+  public double area(Shape[] shapes) {
+    double area = 0;
+    for (Shape shape in shapes) {
+     area += shape.area();
+    }
+    return area;
+  }
+}
+
+interface Shape {
+  public double area();
+}
+
+class Square implements Shape {
+ double height;
+ 
+ public override double area() {
+   return Math.sqrt(height);
+ }
+}
+
+class Circle implements Shape {
+  double radius;
+
+  public override double area() {
+   return radius * radius * Math.PI;
+  }
+}
+
+class Triangle implements Shape { 
+ double firstSide;
+ double secondSide;
+ double thirdSide;
+
+ public override double area() {
+   double totalHalf = (firstSide + secondSide + thirdSide) / 2;
+   return Math.sqrt(totalHalf * (totalHalf - firstSide) * (totalHalf - secondSide) * (totalHalf - thirdSide));
+ }
+}
+```
+
+Now, In this code if we have to add a new Shape we just need to create a class and implement the `Shape` interface. There is no modification needed in `AreaCalculator` class, so it is close to modification as well as open to extension.
