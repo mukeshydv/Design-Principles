@@ -187,7 +187,8 @@ class Triangle implements Shape { 
 
  public override double area() {
    double totalHalf = (firstSide + secondSide + thirdSide) / 2;
-   return Math.sqrt(totalHalf * (totalHalf - firstSide) * (totalHalf - secondSide) * (totalHalf - thirdSide));
+   return Math.sqrt(totalHalf * (totalHalf - firstSide) * 
+    (totalHalf - secondSide) * (totalHalf - thirdSide));
  }
 }
 ```
