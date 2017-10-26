@@ -130,15 +130,15 @@ class AreaCalculator {
  }
 }
 
-public class Square {
+class Square {
   public double height;
 }
 
-public class Circle {
+class Circle {
   public double radius;
 }
 
-public class Triangle {
+class Triangle {
   public double firstSide;
   public double secondSide;
   public double thirdSide;
