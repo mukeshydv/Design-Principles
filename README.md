@@ -50,9 +50,9 @@ class Report {
 }
 ```
 
-At first it looks good, but this class can be change for two reason. First, the contents of report can change and second the printing login can change. So these are two different responsibilities one is business login and second one is representation login and they must be seperated according to SRP.
+At first it looks good, but this class can be change for two reason. First, the contents of report can change and second the printing logic can change. So these are two different responsibilities one is business logic and second one is representation logic and they must be seperated according to SRP.
 
-There are chances that if we change the business logic the representational login will also change.
+There are chances that if we change the business logic the representational logic will also change.
 
 ```java
 class Report {
@@ -92,7 +92,7 @@ class HTMLPrint implements PrintableReport {
 }
 ```
 
-Now the Business login and Representational logic are in different class. It will minimize the coupling and it is bad design to couple two different logics.
+Now the Business logic and Representational logic are in different class. It will minimize the coupling and it is bad design to couple two different logics, also we can add new Representational logic easily without modifying our business logic.
 
 ### 2. Open Close Principle
 
