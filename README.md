@@ -286,4 +286,99 @@ What is the problem with `is-a` relationship here?
 1. `Square` doesn't need Height and Breadth, as the sides of Square are equal so it is a wastage of memory.
 2. To work appropriately the client (In this case `calculateArea` method) need to know the details of derive class `Square`, for this we have to change the client code which breaks the `Open Close Principle`.
 
-So this principle make sure that new Derive classes are extending the Base class without changing their behavior. 
+So this principle make sure that new Derive classes are extending the Base class without changing their behaviour. 
+
+
+### 4. Interface Segregation Principle
+
+*`A client should never be forced to implement an interface that it doesn’t use or clients shouldn’t be forced to depend on methods they do not use.`*
+
+In OOD we provide abstraction to module using interfaces, so we create an interface for a module and an implementation class. But now if we have to create an another module which only have some of the functionality as of previous module then we are forced to implement the whole interface and add some dummy implementation or throw Exception. This is known as `fat interface`.
+
+So the Interface Segregation Principle states that in place of using one fat interface we create multiple small interfaces for submodules.
+
+Let's take an exmaple of a Smart printer which can print, fax and scan. So we have system like this:
+
+```java
+interface ISmartPrinter {
+    void print();
+    void fax();
+    void scan();
+}
+
+class SmartPrinter implements ISmartPrinter {
+
+    public void print() {
+         // Printing code.
+    }
+    
+    public void fax() {
+         // Fax Code.
+    }
+    
+    public void scan() {
+         // Scanning code.
+    }
+}
+```
+
+Now suppose we also have a not so good printer which can only print, so we're forced to implement the whole interface like:
+
+```java
+class EconomicPrinter implements ISmartPrinter {
+    public void print() {
+        //Yes I can print.
+    }
+    
+    public void fax() {
+        throw new NotSupportedException();
+    }
+    
+    public void scan() {
+        throw new NotSupportedException();
+    }
+}
+```
+
+This is not good.
+
+So what we can do is apply ISP and devide the fat interface `ISmartPrinter` into three smaller interfaces, `IPrinter`, `IFax` and `IScanner` like this:
+
+```java
+interface IPrinter {
+    void print();
+}
+
+interface IFax {
+    void fax();
+}
+
+interface IScanner {
+    void scan();
+}
+
+
+class SmartPrinter implements IPrinter, IFax, IScanner {
+
+    public void print() {
+         // Printing code.
+    }
+    
+    public void fax() {
+         // Fax Code.
+    }
+    
+    public void scan() {
+         // Scanning code.
+    }
+}
+
+
+class EconomicPrinter implements IPrinter {
+    public void print() {
+        //Yes I can print.
+    }
+}
+```
+
+Keep in mind that using ISP can result in many small interfaces in code, but it will reduce the complexity, increase testability and also improve code quailty. Smaller interfaces are easier to implement, improving flexibility and the possibility of reuse. But ISP can also be used based on experience, like identifying the areas which are more likely to have an extension in future.
