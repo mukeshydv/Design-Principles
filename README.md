@@ -80,17 +80,21 @@ interface PrintableReport {
 // Different representation logics
 
 class TextPrint implements PrintableReport {
+  @override
   public void printReport(Report report) {
     System.out.print(report.getTitle() + report.getContent());
   }
 }
 
 class HTMLPrint implements PrintableReport {
+  @override
   public void printReport(Report report) {
     System.out.print("<html><head><title>" + report.getTitle() + "</title></head><body>" + report.getContent() + "</body></html>");
   }
 }
 ```
+This principle also helps to identify the classes of the system and designing class diagrams such that change in any functionality only affects the class diagram of classes responsible for that functionality (Reducing the rework).
+
 
 Now the Business logic and Representational logic are in different class. It will minimize the coupling and it is bad design to couple two different logics, also we can add new Representational logic easily without modifying our business logic.
 
@@ -167,7 +171,8 @@ interface Shape {
 class Square implements Shape {
  double height;
  
- public override double area() {
+ @override
+ public double area() {
    return Math.sqrt(height);
  }
 }
@@ -175,7 +180,8 @@ class Square implements Shape {
 class Circle implements Shape {
   double radius;
 
-  public override double area() {
+  @override
+  public double area() {
    return radius * radius * Math.PI;
   }
 }
@@ -185,7 +191,8 @@ class Triangle implements Shape { 
  double secondSide;
  double thirdSide;
 
- public override double area() {
+ @override
+ public double area() {
    double totalHalf = (firstSide + secondSide + thirdSide) / 2;
    return Math.sqrt(totalHalf * (totalHalf - firstSide) * 
     (totalHalf - secondSide) * (totalHalf - thirdSide));
@@ -194,3 +201,89 @@ class Triangle implements Shape { 
 ```
 
 Now, In this code if we have to add a new Shape we just need to create a class and implement the `Shape` interface. There is no modification needed in `AreaCalculator` class, so it is close to modification as well as open to extension.
+
+
+### 3. Liskov's Substitution Principle
+
+*`Let q(x) be a property provable about objects of x of type T. Then q(y) should be provable for objects y of type S where S is a subtype of T.`*
+
+All it is saying that, Any method which is using a reference of base class can use any child class object without knowing it.
+
+or
+
+In other words, A subclass should override the methods of parent class in such way that does not break the functionality from a client point of view.
+
+or
+
+If a method is using the Base class then the reference to the Base class can be replaced with a Derived class without affecting the functionality of the method.
+
+
+A classic problem of Likov's Substitution Principle is Rectangle and Square, as we know a Square `is-a` Rectangle so we will try to establish an `IS-A` relationship using inheritance like below:
+
+```java
+public class Rectangle {
+    private int length;
+    private int breadth;
+    
+    public int getLength() {
+        return length;
+    }
+    
+    public void setLength(int length) {
+        this.length = length;
+    }
+    
+    public int getBreadth() {
+        return breadth;
+    }
+    
+    public void setBreadth(int breadth) {
+        this.breadth = breadth;
+    }
+    
+    public int getArea() {
+        return this.length * this.breadth;
+    }
+}
+
+// Here we're trying to have is-a relationship.
+public class Square extends Rectangle {
+
+    // Breadth and Height is same in Square
+    
+    @Override
+    public void setBreadth(int breadth) {
+        super.setBreadth(breadth);
+        super.setLength(breadth);
+    }
+    
+    @Override
+    public void setLength(int length) {
+        super.setLength(length);
+        super.setBreadth(length);
+    }
+}
+```
+
+Now let's assume we have a client method `calculateArea` which takes `Rectangle` as parameter and have test cases based on `Rectangle` class like following.
+
+```java
+public void calculateArea(Rectangle r) {
+        r.setBreadth(2);
+        r.setLength(3);
+        
+        // From the code, the expected behavior is that 
+        // the area of the rectangle is equal to 6.
+        
+        assert r.getArea() == 6 : "Error in calculating area";
+}
+```
+
+What will happen if we pass a `Square` object to this method? The test case will fail as it will give us an output 9 for `Square`. So here the Likov's Substitution Principle violates.
+
+So here cannot be an `is-a` relationship between `Square` and `Rectangle`.
+What is the problem with `is-a` relationship here?
+1. `Square` doesn't need Height and Breadth, as the sides of Square are equal so it is a wastage of memory.
+2. To work appropriately the client (In this case `calculateArea` method) need to know the details of derive class `Square`, for this we have to change the client code which breaks the `Open Close Principle`.
+
+So this principle make sure that new Derive classes are extending the Base class without changing their behavior. 
