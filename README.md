@@ -6,6 +6,8 @@ A good design is most important step of Software Development life cycle, and to 
 2. **Fragility** - Change to a part affects an unexpected part of the system.
 3. **Immobility** - A module is hard to reuse in other System because it cannot be disentangled from the current System.
 
+
+## SOLID Principles
 To solve these problems there are principles called **SOLID**. It consist of 5 principle:
 
 1. **S** - Single Responsibility Principle
