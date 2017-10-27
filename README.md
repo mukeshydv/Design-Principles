@@ -382,3 +382,108 @@ class EconomicPrinter implements IPrinter {
 ```
 
 Keep in mind that using ISP can result in many small interfaces in code, but it will reduce the complexity, increase testability and also improve code quailty. Smaller interfaces are easier to implement, improving flexibility and the possibility of reuse. But ISP can also be used based on experience, like identifying the areas which are more likely to have an extension in future.
+
+
+### 5. Dependency Inversion Principle
+
+*`High-level modules should not depend on low-level modules. Both should depend on abstractions.`*
+
+When designing a system we have low level classes (classes which implement primary operation like: Network access, Disk access, Database access) and high level classes which have business logic. High level classes are dependent on low level classes.
+
+In a bad design the high level classes directly interact with low level classes, what if we have to change the low level class and replace it with some other logic. In this case we have to change the high level classes as well.
+
+In order to avoid such problem we introduce an abstraction layer between high and low level classes. High level classes should not directly depend upon low level classes they will depend on abstract layer and the abstract layer will be according to high level classes. So now the low level classes will depend upon the abstract layer.
+
+So basically what we did is reversed the dependency by using an abstract layer. Now high level classes are not dependent on low level classes but on abstraction and low level classes are based on the abstraction, so both are now depending on abstraction layer.
+
+As abstract layer is created according to the high level classes and low level classes are created according to abstract layer so in a way now low level classes depend upon high level classes (Dependency inversed).
+
+![alt text](https://upload.wikimedia.org/wikipedia/commons/9/96/Dependency_inversion.png)
+
+In `figure-1` `Object A` is directly depend on `Object B` but after introducing an abstract layer in `figure-2` `Interface A` now the `Object A` depend on `Interface A` and `Object B` follows the rules of `Interface A`.
+
+As you can see in `figure-1` now `Package 2` depends on `Package 1` (Dependency inversed). 
+
+**DIP also removes the coupling between modules.**
+
+Now assume we have an `Notification` class which sends notification to users via Email like following:
+
+```java
+public class Email {
+    public string toAddress;
+    public string subject;
+    public string content;
+    
+    public void sendEmail() {
+        //Send email
+    }
+}
+
+
+public class Notification {
+    private Email email;
+    
+    public Notification(Email email) {
+        this.email = email;
+    }
+
+    public void Send() {
+        email.SendEmail();
+    }
+}
+```
+
+This looks good. Isn't it? but what if now in place of `Email` we want to send notification via `SMS`? we have to change the `Notification` and add `SMS` support in it.
+
+Now, let's see what we can achive using DIP.
+See following code:
+
+```java
+public interface INotification {
+    public void sendNotification();
+}
+
+public class Email implements INotification {
+    public string toAddress;
+    public string subject;
+    public string content;
+    
+    public void sendNotification() {
+        //Send email
+    }
+}
+
+
+public class Notification {
+    private INotification notification;
+    
+    public Notification(INotification notification) {
+        this.notification = notification;
+    }
+
+    public void Send() {
+        notification.sendNotification();
+    }
+}
+```
+
+Now if we have to change from `Email` to `SMS` we just need to add following class:
+
+```java
+public class SMS implements INotification {
+    public string phoneNumber;
+    public string message;
+    
+    public void sendNotification() {
+        //Send sms
+    }
+}
+```
+
+And pass the object of `SMS` to `Notification` class.
+
+So DIP removes coupling between two modules so that they can be changed independently without affecting each other. It reduces the maintanance cost, bugs and rework. The testing area also minimized bacause we only need to test the module which is modified.
+
+Using DIP requires more code, more classes and interface and more effort but it makes the design more flexible and less error prone.
+
+When using DIP the high level class may create the object of low level class using some Creational Design Pattern like: Factory Method, Abstract Factory, Prototype.
