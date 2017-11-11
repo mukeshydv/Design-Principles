@@ -18,8 +18,6 @@ To solve these problems there are principles called **SOLID**. It consist of 5 p
 
 We will talk about each of them with exmaple.
 
-**Note: I'm writing the examples in Java beacause everyone is familier with it. It can be easily converted into Swift.**
-
 ### 1. Single Responsibility Principle
 
 *`A Class should have only one reason to change`*
